@@ -3,13 +3,13 @@ using Notepad.Interface;
 
 namespace Notepad.Models
 {
-  public record Notepad : INotepadInterface
+  public record Note : INotepadInterface
   {
     public Guid Id { get; set; }
     [Required]
     public string Title { get; set; }
     [Required]
-    public string Note { get; set; }
+    public string Content { get; set; }
     public DateTimeOffset CreatedDate { get; set; }
 
   }

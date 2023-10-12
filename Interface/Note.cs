@@ -4,7 +4,7 @@ namespace Notepad.Interface
   {
     Guid Id { get; set; }
     string Title { get; set; }
-    string Note { get; set; }
+    string Content { get; set; }
     DateTimeOffset CreatedDate { get; set; }
   }
 }

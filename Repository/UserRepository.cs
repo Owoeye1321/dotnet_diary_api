@@ -1,3 +1,4 @@
+using MongoDB.Driver;
 using Notepad.Controllers;
 using Notepad.Models;
 
@@ -5,6 +6,15 @@ namespace Notepad.Repository
 {
   public class UserRepository : IUserActions
   {
+
+    private const string DatabaseName = "notepad";
+    private const string ItemcollectionName = "Users";
+    private readonly IMongoCollection<Item> UserCollections;
+    public readonly FilterDefinitionBuilder<Item> filterBuilder = Builders<Item>.Filter;
+    public UserRepository(IMongoClient mongoClient)
+    {
+
+    }
     public Task<User> CreateUserAsync(User user)
     {
       throw new NotImplementedException();
@@ -34,5 +44,9 @@ namespace Notepad.Repository
     {
       throw new NotImplementedException();
     }
+  }
+
+  internal class Item
+  {
   }
 }

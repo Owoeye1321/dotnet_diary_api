@@ -8,11 +8,12 @@ namespace Notepad.Repository
   {
     private const string DatabaseName = "notepad";
     private const string ItemcollectionName = "Notes";
-    private readonly IMongoCollection<Item> UserCollections;
-    public readonly FilterDefinitionBuilder<Item> filterBuilder = Builders<Item>.Filter;
+    private readonly IMongoCollection<Note> UserCollections;
+    private readonly FilterDefinitionBuilder<Note> filterBuilder = Builders<Note>.Filter;
     public NoteRepository(IMongoClient mongoClient)
     {
-
+      IMongoDatabase database = mongoClient.GetDatabase(DatabaseName);
+      UserCollections = database.GetCollection<Note>(ItemcollectionName);
     }
     public async Task<Note> CreateNoteAsync(Note note)
     {

@@ -8,11 +8,13 @@ namespace Notepad.Repository
   {
 
     private const string DatabaseName = "notepad";
-    private const string ItemcollectionName = "Users";
-    private readonly IMongoCollection<Item> UserCollections;
-    public readonly FilterDefinitionBuilder<Item> filterBuilder = Builders<Item>.Filter;
+    private const string UserCollectionName = "Users";
+    private readonly IMongoCollection<User> UserCollections;
+    private readonly FilterDefinitionBuilder<User> filterBuilder = Builders<User>.Filter;
     public UserRepository(IMongoClient mongoClient)
     {
+      IMongoDatabase database = mongoClient.GetDatabase(DatabaseName);
+      UserCollections = database.GetCollection<User>(UserCollectionName);
 
     }
     public Task<User> CreateUserAsync(User user)
@@ -46,7 +48,5 @@ namespace Notepad.Repository
     }
   }
 
-  internal class Item
-  {
-  }
+
 }

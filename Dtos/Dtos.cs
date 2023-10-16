@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Notepad
+namespace Notepad.Dtos
 {
   public record NotepadDto(Guid Id, [Required] string Title, [Required] string Content, DateTimeOffset CreatedDate);
   public record CreateNotepadDto([Required] string Title, [Required] string Content);

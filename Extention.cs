@@ -1,4 +1,5 @@
 using Notepad.Models;
+using Notepad.Dtos;
 
 namespace Notepad
 {

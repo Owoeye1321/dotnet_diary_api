@@ -1,5 +1,6 @@
 using MongoDB.Driver;
 using Notepad.Controllers;
+using Notepad.Dtos;
 using Notepad.Models;
 
 namespace Notepad.Repository
@@ -27,17 +28,17 @@ namespace Notepad.Repository
       throw new NotImplementedException();
     }
 
-    public Task<User> GetUserAsync(Guid Id)
+    public Task<UserDto> GetUserAsync(Guid Id)
     {
       throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<User>> GetUsersAsync()
+    public Task<IEnumerable<UserDto>> GetUsersAsync()
     {
       throw new NotImplementedException();
     }
 
-    public Task ResetPasswordAsync(string Password)
+    public Task ResetPasswordAsync(ResetPasswordDto password)
     {
       throw new NotImplementedException();
     }

@@ -31,3 +31,16 @@
 /Users/mac/Desktop/MyApplications/notepad/obj/Debug/net7.0/notepad.pdb
 /Users/mac/Desktop/MyApplications/notepad/obj/Debug/net7.0/notepad.genruntimeconfig.cache
 /Users/mac/Desktop/MyApplications/notepad/obj/Debug/net7.0/ref/notepad.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/AWSSDK.Core.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/AWSSDK.SecurityToken.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/DnsClient.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/MongoDB.Bson.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/MongoDB.Driver.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/MongoDB.Driver.Core.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/MongoDB.Libmongocrypt.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/SharpCompress.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/Snappier.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/ZstdSharp.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/runtimes/linux/native/libmongocrypt.so
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/runtimes/osx/native/libmongocrypt.dylib
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/runtimes/win/native/mongocrypt.dll

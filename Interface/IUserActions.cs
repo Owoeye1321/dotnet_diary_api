@@ -5,7 +5,7 @@ namespace Notepad.Controllers
 {
   public interface IUserActions
   {
-    Task<User> CreateUserAsync(User user);
+    Task CreateUserAsync(User user);
     Task<UserDto> GetUserAsync(Guid Id);
     Task<IEnumerable<UserDto>> GetUsersAsync();
     Task UpdateUserAsync(User user);

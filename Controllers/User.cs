@@ -1,11 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Notepad.Models;
 using Notepad.Dtos;
-using Notepad.Repository;
 
 namespace Notepad.Controllers
 {
-  public class UserController : IUserActions
+
+  //this brings a bunch of additional default behaviour for your controller 
+  [ApiController]
+  //adding a route
+  //[Route("[controller]")] //this would make the route inherit the controller name e.g GET /items
+  [Route("user")]
+  public class UserController : ControllerBase
   {
 
     public readonly IUserActions userRepository;
@@ -13,36 +18,44 @@ namespace Notepad.Controllers
     {
       this.userRepository = userRepository;
     }
-    public async Task<User> CreateUserAsync(User user)
+    //this controll all post request to /user
+    [HttpPost]
+    public async Task<IActionResult> CreateUserAsync(UserDto userDto)
+    {
+      User user = new()
+      {
+        Id = Guid.NewGuid(),
+        Email = userDto.Email,
+        Username = userDto.Username,
+        Password = userDto.Password,
+        Role = userDto.Role
+      };
+      await userRepository.CreateUserAsync(user);
+      var responseData = new { message = "Account Created Successfully", data = user.parseUserDto() };
+      return Ok(responseData);
+
+    }
+
+    public Task DeleteUserAsync(Guid Id)
     {
       throw new NotImplementedException();
     }
 
-    public async Task DeleteUserAsync(Guid Id)
+    public Task<UserDto> GetUserAsync(Guid Id)
     {
       throw new NotImplementedException();
     }
 
-    public async Task<UserDto> GetUserAsync(Guid Id)
+    public Task<IEnumerable<UserDto>> GetUsersAsync()
     {
       throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<UserDto>> GetUsersAsync()
+    public Task ResetPasswordAsync(ResetPasswordDto password)
     {
       throw new NotImplementedException();
     }
-
-    public async Task ResetPasswordAsync(ResetPasswordDto password)
-    {
-      throw new NotImplementedException();
-    }
-
-    public Task ResetPasswordAsync(Guid Id)
-    {
-      throw new NotImplementedException();
-    }
-    public async Task UpdateUserAsync(User user)
+    public Task UpdateUserAsync(User user)
     {
       throw new NotImplementedException();
     }

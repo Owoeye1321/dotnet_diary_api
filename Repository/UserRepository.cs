@@ -18,9 +18,9 @@ namespace Notepad.Repository
       UserCollections = database.GetCollection<User>(UserCollectionName);
 
     }
-    public Task<User> CreateUserAsync(User user)
+    public async Task CreateUserAsync(User user)
     {
-      throw new NotImplementedException();
+      await UserCollections.InsertOneAsync(user);
     }
 
     public Task DeleteUserAsync(Guid Id)

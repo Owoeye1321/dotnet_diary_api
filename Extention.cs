@@ -12,7 +12,7 @@ namespace Notepad
     }
     public static UserDto parseUserDto(this User user)
     {
-      return new UserDto(user.Id, user.Email, user.Password, user.Role, user.Username);
+      return new UserDto(user.Email, user.Password, user.Role, user.Username);
     }
   }
 

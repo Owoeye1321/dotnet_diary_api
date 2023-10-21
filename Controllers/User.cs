@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Notepad.Models;
 using Notepad.Dtos;
 using System.Net;
+using Notepad.utils;
 
 namespace Notepad.Controllers
 {
@@ -34,8 +35,8 @@ namespace Notepad.Controllers
         Role = userDto.Role
       };
       await userRepository.CreateUserAsync(user);
-      var responseData = new { status = HttpStatusCode.OK, message = "Account Created Successfully", data = user.parseUserDto() };
-      return Ok(responseData);
+      ApiResponse response = new(HttpStatusCode.OK, "Account Created Successfully", user.parseUserDto());
+      return Ok(response);
 
     }
 
@@ -43,6 +44,8 @@ namespace Notepad.Controllers
     // {
     //   throw new NotImplementedException();
     // }
+
+
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> GetUserAsync(Guid Id)
     {
@@ -51,25 +54,39 @@ namespace Notepad.Controllers
       {
         return NotFound();
       }
-      var responseData = new { status = HttpStatusCode.OK, message = "Account Fetched Successfully", data = user.parseUserDto() };
-      return Ok(responseData);
+      ApiResponse response = new ApiResponse(HttpStatusCode.OK, "Account Fetched Successfully", user.parseUserDto());
+      return Ok(response);
     }
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersAsync()
     {
 
       var users = (await userRepository.GetUsersAsync()).Select(user => user.parseUserDto());
-      var responseData = new { status = HttpStatusCode.OK, message = "Accounts Fetched Successfully", data = users };
-      return Ok(responseData);
+      ApiResponse response = new ApiResponse(HttpStatusCode.OK, "Accounts Fetched Successfully", users);
+      return Ok(response);
     }
 
-    // public Task ResetPasswordAsync(ResetPasswordDto password)
-    // {
-    //   throw new NotImplementedException();
-    // }
-    // public Task UpdateUserAsync(User user)
-    // {
-    //   throw new NotImplementedException();
-    // }
+    [HttpPut("reset-password/{id}")]
+    public async Task<ActionResult> ResetPasswordAsync(Guid Id, ResetPasswordDto reset)
+    {
+      var user = await userRepository.GetUserAsync(Id);
+      if (user is null) return NotFound();
+      await userRepository.ResetPasswordAsync(reset);
+      return Ok();
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<UserDto>> UpdateUserAsync(Guid Id, UpdateUserDto user)
+    {
+      var existingUser = await userRepository.GetUserAsync(Id);
+      if (existingUser is null) return NotFound();
+      existingUser.Email = user.Email;
+      existingUser.Password = user.Password;
+      existingUser.Username = user.Username;
+      existingUser.Role = user.Role;
+      await userRepository.UpdateUserAsync(existingUser);
+      ApiResponse response = new(HttpStatusCode.OK, "Account Updated Successfully");
+      return Ok(response);
+    }
   }
 }

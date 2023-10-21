@@ -43,14 +43,18 @@ namespace Notepad.Repository
       return await UserCollections.Find(new BsonDocument()).ToListAsync();
     }
 
-    public Task ResetPasswordAsync(ResetPasswordDto password)
+    public async Task ResetPasswordAsync(ResetPasswordDto reset)
     {
-      throw new NotImplementedException();
+      var filter = filterBuilder.Eq(existingUser => existingUser.Id, reset.Id);
+      var update = Builders<User>.Update.Set("Password", reset.Password);
+      await UserCollections.UpdateOneAsync(filter, update);
     }
 
-    public Task UpdateUserAsync(User user)
+    public async Task UpdateUserAsync(User user)
     {
-      throw new NotImplementedException();
+      var filter = filterBuilder.Eq(existingUser => existingUser.Id, user.Id);
+      await UserCollections.ReplaceOneAsync(filter, user);
+
     }
   }
 

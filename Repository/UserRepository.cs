@@ -1,3 +1,4 @@
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Notepad.Controllers;
 using Notepad.Dtos;
@@ -28,14 +29,18 @@ namespace Notepad.Repository
       throw new NotImplementedException();
     }
 
-    public Task<UserDto> GetUserAsync(Guid Id)
+    public async Task<User> GetUserAsync(Guid Id)
     {
-      throw new NotImplementedException();
+
+      var filter = filterBuilder.Eq(user => user.Id, Id);
+      return await UserCollections.Find(filter).SingleOrDefaultAsync();
+
+
     }
 
-    public Task<IEnumerable<UserDto>> GetUsersAsync()
+    public async Task<IEnumerable<User>> GetUsersAsync()
     {
-      throw new NotImplementedException();
+      return await UserCollections.Find(new BsonDocument()).ToListAsync();
     }
 
     public Task ResetPasswordAsync(ResetPasswordDto password)

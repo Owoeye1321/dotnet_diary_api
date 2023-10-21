@@ -33,7 +33,7 @@ namespace Notepad.Controllers
         Password = userDto.Password,
         Role = userDto.Role
       };
-      // await userRepository.CreateUserAsync(user);
+      await userRepository.CreateUserAsync(user);
       var responseData = new { status = HttpStatusCode.OK, message = "Account Created Successfully", data = user.parseUserDto() };
       return Ok(responseData);
 
@@ -43,16 +43,25 @@ namespace Notepad.Controllers
     // {
     //   throw new NotImplementedException();
     // }
+    [HttpGet("{id}")]
+    public async Task<ActionResult<UserDto>> GetUserAsync(Guid Id)
+    {
+      var user = await userRepository.GetUserAsync(Id);
+      if (user == null)
+      {
+        return NotFound();
+      }
+      var responseData = new { status = HttpStatusCode.OK, message = "Account Fetched Successfully", data = user.parseUserDto() };
+      return Ok(responseData);
+    }
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersAsync()
+    {
 
-    // public Task<UserDto> GetUserAsync(Guid Id)
-    // {
-    //   throw new NotImplementedException();
-    // }
-
-    // public Task<IEnumerable<UserDto>> GetUsersAsync()
-    // {
-    //   throw new NotImplementedException();
-    // }
+      var users = (await userRepository.GetUsersAsync()).Select(user => user.parseUserDto());
+      var responseData = new { status = HttpStatusCode.OK, message = "Accounts Fetched Successfully", data = users };
+      return Ok(responseData);
+    }
 
     // public Task ResetPasswordAsync(ResetPasswordDto password)
     // {

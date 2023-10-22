@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using Notepad.Controllers;
 using Notepad.Dtos;
 using Notepad.Models;
+using Notepad.utils;
 
 namespace Notepad.Repository
 {
@@ -41,6 +42,23 @@ namespace Notepad.Repository
     public async Task<IEnumerable<User>> GetUsersAsync()
     {
       return await UserCollections.Find(new BsonDocument()).ToListAsync();
+    }
+
+    public async Task<LoggedIn> LoginAsync(LoginDto login)
+    {
+      var filter = filterBuilder.And(
+        filterBuilder.Eq(user => user.Email, login.Email),
+        filterBuilder.Eq(user => user.Password, login.Password)
+        );
+
+      var user = UserCollections.Find(filter).FirstOrDefaultAsync();
+      LoggedIn loggedIn = new
+      {
+        data = user
+      };
+      return loggedIn;
+
+
     }
 
     public async Task ResetPasswordAsync(ResetPasswordDto reset)

@@ -1,5 +1,6 @@
 using Notepad.Dtos;
 using Notepad.Models;
+using Notepad.utils;
 
 namespace Notepad.Controllers
 {
@@ -11,5 +12,6 @@ namespace Notepad.Controllers
     Task UpdateUserAsync(User user);
     Task DeleteUserAsync(Guid Id);
     Task ResetPasswordAsync(ResetPasswordDto password);
+    Task<LoggedIn> LoginAsync(LoginDto login);
   }
 }

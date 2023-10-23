@@ -1,4 +1,6 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 using Notepad.Models;
 
 namespace Notepad.Helpers
@@ -11,7 +13,7 @@ namespace Notepad.Helpers
       var symmentricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
       var credentials = new SigningCredentials(symmentricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
       var header = new JwtHeader(credentials);
-      var payload = new jwtPayloca(user, null, null, null, DateTime.Today.AddDays(1));
+      var payload = new JwtPayload(user.ToString(), null, null, null, DateTime.Today.AddDays(1));
       var securityToken = new JwtSecurityToken(header, payload);
       return new JwtSecurityTokenHandler().WriteToken(securityToken);
     }

@@ -91,11 +91,12 @@ namespace Notepad.Controllers
       return Ok(response);
     }
 
-    [HttpPost("/login")]
+    [HttpPost("login")]
     public async Task<ActionResult> Login(LoginDto data)
     {
       var user = await userRepository.LoginAsync(data.Email);
       if (user == null) return BadRequest(new { code = HttpStatusCode.BadRequest, message = "Invalid Credentials" });
+      if (!BCrypt.Net.BCrypt.Verify(data.Password, user.Password)) return BadRequest(new { code = HttpStatusCode.BadRequest, message = "Invalid Credentials" });
       ApiResponse response = new(HttpStatusCode.OK, "Logged In Successfully", user.parseUserDto());
       return Ok(response);
     }

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Notepad.Interface;
 
 namespace Notepad.Models
@@ -11,6 +12,8 @@ namespace Notepad.Models
     [Required]
     public string Username { get; set; }
     [Required]
+
+    [JsonIgnore]
     public string Password { get; set; }
     public string Role { get; set; }
   }

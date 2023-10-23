@@ -44,21 +44,10 @@ namespace Notepad.Repository
       return await UserCollections.Find(new BsonDocument()).ToListAsync();
     }
 
-    public async Task<LoggedIn> LoginAsync(LoginDto login)
+    public async Task<User> LoginAsync(string email)
     {
-      var filter = filterBuilder.And(
-        filterBuilder.Eq(user => user.Email, login.Email),
-        filterBuilder.Eq(user => user.Password, login.Password)
-        );
-
-      var user = UserCollections.Find(filter).FirstOrDefaultAsync();
-      LoggedIn loggedIn = new
-      {
-        data = user
-      };
-      return loggedIn;
-
-
+      var filter = filterBuilder.Eq(user => user.Email, email);
+      return await UserCollections.Find(filter).FirstOrDefaultAsync();
     }
 
     public async Task ResetPasswordAsync(ResetPasswordDto reset)

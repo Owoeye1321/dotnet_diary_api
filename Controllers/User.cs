@@ -26,12 +26,14 @@ namespace Notepad.Controllers
 
     public async Task<ActionResult> CreateUserAsync(UserDto userDto)
     {
+      var userExist = await userRepository.LoginAsync(userDto.Email);
+      if (userExist != null) return BadRequest(new { code = HttpStatusCode.BadRequest, message = "User with this email already exist" });
       User user = new()
       {
         Id = Guid.NewGuid(),
         Email = userDto.Email,
         Username = userDto.Username,
-        Password = userDto.Password,
+        Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password),
         Role = userDto.Role
       };
       await userRepository.CreateUserAsync(user);
@@ -86,6 +88,15 @@ namespace Notepad.Controllers
       existingUser.Role = user.Role;
       await userRepository.UpdateUserAsync(existingUser);
       ApiResponse response = new(HttpStatusCode.OK, "Account Updated Successfully");
+      return Ok(response);
+    }
+
+    [HttpPost("/login")]
+    public async Task<ActionResult> Login(LoginDto data)
+    {
+      var user = await userRepository.LoginAsync(data.Email);
+      if (user == null) return BadRequest(new { code = HttpStatusCode.BadRequest, message = "Invalid Credentials" });
+      ApiResponse response = new(HttpStatusCode.OK, "Logged In Successfully", user.parseUserDto());
       return Ok(response);
     }
   }

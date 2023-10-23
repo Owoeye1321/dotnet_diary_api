@@ -12,6 +12,6 @@ namespace Notepad.Controllers
     Task UpdateUserAsync(User user);
     Task DeleteUserAsync(Guid Id);
     Task ResetPasswordAsync(ResetPasswordDto password);
-    Task<LoggedIn> LoginAsync(LoginDto login);
+    Task<User> LoginAsync(string email);
   }
 }

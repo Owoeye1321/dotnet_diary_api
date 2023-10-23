@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "kDGymbIjDqDti8kR5odYSADQDUTgfSocAf3ZAzuqiwRTnM/KsY2Vly0ycYKIJHklbafjcYPdah9J15Se88GLVQ==",
+  "dgSpecHash": "B5s12RBBHNKFmUj0OL7GghKUZ6I+T4DbLdL3ze6J7CdYs6rCSuJNqbV6FgAvpNY7K5jg8HgvqzWtvS/hQr8yzA==",
   "success": true,
   "projectFilePath": "/Users/mac/Desktop/MyApplications/notepad/notepad.csproj",
   "expectedPackageFiles": [
     "/Users/mac/.nuget/packages/awssdk.core/3.7.100.14/awssdk.core.3.7.100.14.nupkg.sha512",
     "/Users/mac/.nuget/packages/awssdk.securitytoken/3.7.100.14/awssdk.securitytoken.3.7.100.14.nupkg.sha512",
+    "/Users/mac/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/Users/mac/.nuget/packages/dnsclient/1.6.1/dnsclient.1.6.1.nupkg.sha512",
     "/Users/mac/.nuget/packages/microsoft.aspnetcore.openapi/7.0.11/microsoft.aspnetcore.openapi.7.0.11.nupkg.sha512",
     "/Users/mac/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",

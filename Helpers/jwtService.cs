@@ -7,7 +7,7 @@ namespace Notepad.Helpers
 {
   public class JwtService
   {
-    private string securityKey = 'hello world';
+    private string securityKey = "hello world";
     public string Generatejwt(User user)
     {
       var symmentricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));

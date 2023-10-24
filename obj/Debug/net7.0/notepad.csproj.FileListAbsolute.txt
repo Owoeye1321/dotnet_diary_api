@@ -45,3 +45,8 @@
 /Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/runtimes/osx/native/libmongocrypt.dylib
 /Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/runtimes/win/native/mongocrypt.dll
 /Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/BCrypt.Net-Next.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/Microsoft.IdentityModel.Logging.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/Microsoft.IdentityModel.Tokens.dll
+/Users/mac/Desktop/MyApplications/notepad/bin/Debug/net7.0/System.IdentityModel.Tokens.Jwt.dll

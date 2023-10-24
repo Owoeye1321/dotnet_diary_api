@@ -3,6 +3,7 @@ using Notepad.Models;
 using Notepad.Dtos;
 using System.Net;
 using Notepad.utils;
+using Notepad.Helpers;
 
 namespace Notepad.Controllers
 {
@@ -96,6 +97,8 @@ namespace Notepad.Controllers
     {
       var user = await userRepository.LoginAsync(data.Email);
       if (user == null) return BadRequest(new { code = HttpStatusCode.BadRequest, message = "Invalid Credentials" });
+      JwtService jwt_service = new JwtService()
+      var token = await jwt_service.Generatejwt(user)
       if (!BCrypt.Net.BCrypt.Verify(data.Password, user.Password)) return BadRequest(new { code = HttpStatusCode.BadRequest, message = "Invalid Credentials" });
       ApiResponse response = new(HttpStatusCode.OK, "Logged In Successfully", user.parseUserDto());
       return Ok(response);

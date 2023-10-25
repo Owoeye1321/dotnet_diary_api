@@ -7,19 +7,28 @@ namespace Notepad.Helpers
 {
   public class JwtService
   {
-    private string securityKey = "hello world";
-    public string Generatejwt(User user)
+    private string securityKey = "hello world keep this parameter save";
+    public string Generatejwt(Guid id)
     {
       var symmentricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
       var credentials = new SigningCredentials(symmentricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
       var header = new JwtHeader(credentials);
-      var payload = new JwtPayload(user.ToString(), null, null, null, DateTime.Today.AddDays(1));
+      var payload = new JwtPayload(id.ToString(), null, null, null, DateTime.Today.AddDays(1));
       var securityToken = new JwtSecurityToken(header, payload);
       return new JwtSecurityTokenHandler().WriteToken(securityToken);
     }
-    public string VerifyJwt()
+    public JwtSecurityToken VerifyJwt(string jwt)
     {
-      return "";
+      var tokenHandler = new JwtSecurityTokenHandler();
+      var key = Encoding.ASCII.GetBytes(securityKey);
+      tokenHandler.ValidateToken(jwt,new TokenValidationParameters {
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuerSigningKey = true,
+        ValidateIssuer = false,
+        ValidateAudience = false
+      }, out SecurityToken  validatedToken);
+
+      return (JwtSecurityToken) validatedToken;
     }
   }
 

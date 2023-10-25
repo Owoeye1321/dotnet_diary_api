@@ -58,12 +58,13 @@ namespace Notepad.Controllers
         return NotFound();
       }
       ApiResponse response = new ApiResponse(HttpStatusCode.OK, "Account Fetched Successfully", user.parseUserDto());
-      return Ok(response);
+      return Ok(response); 
     }
     [HttpGet]
+   
     public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersAsync()
     {
-
+      
       var users = (await userRepository.GetUsersAsync()).Select(user => user.parseUserDto());
       ApiResponse response = new ApiResponse(HttpStatusCode.OK, "Accounts Fetched Successfully", users);
       return Ok(response);
@@ -99,8 +100,31 @@ namespace Notepad.Controllers
       if (user == null) return BadRequest(new { code = HttpStatusCode.BadRequest, message = "Invalid Credentials" });
       if (!BCrypt.Net.BCrypt.Verify(data.Password, user.Password)) return BadRequest(new { code = HttpStatusCode.BadRequest, message = "Invalid Credentials" });
       JwtService jwt_service = new JwtService();
-      var token = jwt_service.Generatejwt(user);
+      var token = jwt_service.Generatejwt(user.Id);
       return Ok(new { code = HttpStatusCode.OK, message = "Logged In Successfully", data = user.parseUserDto(), token = token });
     }
+
+    [HttpGet("profile")]
+    public async Task <ActionResult<User>> Profile(){
+      //var jwt = Request.Cookies["jwt"]
+       // Retrieve the JWT token from the request header
+    string jwt = Request.Headers["Authorization"].FirstOrDefault()?.Replace("Bearer ", "");
+
+    if (string.IsNullOrEmpty(jwt))
+    {
+        return Unauthorized("JWT token is missing in the request header");
+    }
+
+      JwtService jwt_service = new JwtService();
+      var token = jwt_service.VerifyJwt(jwt);
+      Guid userId = new Guid(token.Issuer);
+      var user = await userRepository.GetUserAsync(userId);
+      if (user == null)
+        {
+            return NotFound("User not found");
+        }
+     return Ok(new { code = HttpStatusCode.OK, message = "Profile retrieved", data = user.parseUserDto()});
+    }
+
   }
 }

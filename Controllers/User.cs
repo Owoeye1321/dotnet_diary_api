@@ -58,13 +58,13 @@ namespace Notepad.Controllers
         return NotFound();
       }
       ApiResponse response = new ApiResponse(HttpStatusCode.OK, "Account Fetched Successfully", user.parseUserDto());
-      return Ok(response); 
+      return Ok(response);
     }
     [HttpGet]
-   
+
     public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersAsync()
     {
-      
+
       var users = (await userRepository.GetUsersAsync()).Select(user => user.parseUserDto());
       ApiResponse response = new ApiResponse(HttpStatusCode.OK, "Accounts Fetched Successfully", users);
       return Ok(response);
@@ -105,25 +105,26 @@ namespace Notepad.Controllers
     }
 
     [HttpGet("profile")]
-    public async Task <ActionResult<User>> Profile(){
-      //var jwt = Request.Cookies["jwt"]
-       // Retrieve the JWT token from the request header
-    string jwt = Request.Headers["Authorization"].FirstOrDefault()?.Replace("Bearer ", "");
-
-    if (string.IsNullOrEmpty(jwt))
+    public async Task<ActionResult<User>> Profile()
     {
+      //var jwt = Request.Cookies["jwt"]
+      // Retrieve the JWT token from the request header
+      string jwt = Request.Headers["Authorization"].FirstOrDefault()?.Replace("Bearer ", "");
+
+      if (string.IsNullOrEmpty(jwt))
+      {
         return Unauthorized("JWT token is missing in the request header");
-    }
+      }
 
       JwtService jwt_service = new JwtService();
       var token = jwt_service.VerifyJwt(jwt);
       Guid userId = new Guid(token.Issuer);
       var user = await userRepository.GetUserAsync(userId);
       if (user == null)
-        {
-            return NotFound("User not found");
-        }
-     return Ok(new { code = HttpStatusCode.OK, message = "Profile retrieved", data = user.parseUserDto()});
+      {
+        return NotFound("User not found");
+      }
+      return Ok(new { code = HttpStatusCode.OK, message = "Profile retrieved", data = user.parseUserDto() });
     }
 
   }

@@ -10,6 +10,9 @@ namespace Notepad.Models
     public string Title { get; set; }
     [Required]
     public string Content { get; set; }
+
+    [Required]
+    public string UserId { get; set; }
     public DateTimeOffset CreatedDate { get; set; }
 
   }

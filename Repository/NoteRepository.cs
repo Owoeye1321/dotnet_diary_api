@@ -8,16 +8,17 @@ namespace Notepad.Repository
   {
     private const string DatabaseName = "notepad";
     private const string ItemcollectionName = "Notes";
-    private readonly IMongoCollection<Note> UserCollections;
+    private readonly IMongoCollection<Note> NoteCollections;
     private readonly FilterDefinitionBuilder<Note> filterBuilder = Builders<Note>.Filter;
     public NoteRepository(IMongoClient mongoClient)
     {
       IMongoDatabase database = mongoClient.GetDatabase(DatabaseName);
-      UserCollections = database.GetCollection<Note>(ItemcollectionName);
+      NoteCollections = database.GetCollection<Note>(ItemcollectionName);
     }
-    public async Task<Note> CreateNoteAsync(Note note)
+    public async Task CreateNoteAsync(Note note)
     {
-      throw new NotImplementedException();
+      await NoteCollections.InsertOneAsync(note);
+
     }
     public async Task UpdateNoteAsync(Note note)
     {

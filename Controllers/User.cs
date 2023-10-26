@@ -70,10 +70,10 @@ namespace Notepad.Controllers
       return Ok(response);
     }
 
-    [HttpPut("reset-password/{id}")]
-    public async Task<ActionResult> ResetPasswordAsync(Guid Id, ResetPasswordDto reset)
+    [HttpPut("reset-password")]
+    public async Task<ActionResult> ResetPasswordAsync(ResetPasswordDto reset)
     {
-      var user = await userRepository.GetUserAsync(Id);
+      var user = await userRepository.GetUserAsync(reset.Id);
       if (user is null) return NotFound();
       await userRepository.ResetPasswordAsync(reset);
       return Ok();
@@ -115,7 +115,6 @@ namespace Notepad.Controllers
       {
         return Unauthorized("JWT token is missing in the request header");
       }
-
       JwtService jwt_service = new JwtService();
       var token = jwt_service.VerifyJwt(jwt);
       Guid userId = new Guid(token.Issuer);

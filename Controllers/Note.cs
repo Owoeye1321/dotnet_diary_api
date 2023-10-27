@@ -1,6 +1,8 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Notepad.Dtos;
 using Notepad.Interface;
+using Notepad.Models;
 
 namespace Notepad
 {
@@ -22,24 +24,31 @@ namespace Notepad
     }
 
     [HttpPost]
-    public ActionResult CreateNote(NotepadDto note)
+    public async Task<ActionResult> CreateNoteAsync(NotepadDto note)
     {
+      //var jwt = Request.Cookies["jwt"]
+      // Retrieve the JWT token from the request header
+      string jwt = Request.Headers["Authorization"].FirstOrDefault()?.Replace("Bearer ", "");
+      //var jwt = Request.Cookies["jwt"]
+      // Retrieve the JWT token from the request header
 
-      string jwt = Request.Headers["Authorization"].FirstOrDefault()?.Replace("Bearer", "");
       if (string.IsNullOrEmpty(jwt))
       {
         return Unauthorized("Jwt is not provided");
       };
       var token = jwtService.VerifyJwt(jwt);
       Guid userId = new Guid(token.Issuer);
-      return Ok(new { userId = userId });
-      // Note data = new
-      // {
-      //   Id = new Guid(),
-      //   Title = note.Title,
-      //   Content = note.Content,
-      //   UserId =
-      // }
+      Note data = new()
+      {
+        Id = new Guid(),
+        Title = note.Title,
+        Content = note.Content,
+        UserId = userId,
+        CreatedDate = DateTimeOffset.UtcNow
+      };
+
+      await noteRepository.CreateNoteAsync(data);
+      return Ok(new { statusCode = HttpStatusCode.OK, message = "Saved Successfully" });
     }
 
 

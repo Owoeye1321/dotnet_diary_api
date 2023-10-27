@@ -4,6 +4,7 @@ using Notepad.Dtos;
 using System.Net;
 using Notepad.utils;
 using Notepad.Helpers;
+using Notepad.Interface;
 
 namespace Notepad.Controllers
 {
@@ -17,9 +18,11 @@ namespace Notepad.Controllers
   {
 
     public readonly IUserActions userRepository;
-    public UserController(IUserActions userRepository)
+    public readonly IJwtService jwtService;
+    public UserController(IUserActions userRepository, IJwtService jwtService)
     {
       this.userRepository = userRepository;
+      this.jwtService = jwtService;
     }
 
     //this controll all post request to /user
@@ -74,7 +77,7 @@ namespace Notepad.Controllers
     public async Task<ActionResult> ResetPasswordAsync(ResetPasswordDto reset)
     {
       var user = await userRepository.GetUserAsync(reset.Id);
-      if (user is null) return NotFound();
+      if (user is null) return NotFound("User not found");
       await userRepository.ResetPasswordAsync(reset);
       return Ok();
     }
@@ -99,13 +102,12 @@ namespace Notepad.Controllers
       var user = await userRepository.LoginAsync(data.Email);
       if (user == null) return BadRequest(new { code = HttpStatusCode.BadRequest, message = "Invalid Credentials" });
       if (!BCrypt.Net.BCrypt.Verify(data.Password, user.Password)) return BadRequest(new { code = HttpStatusCode.BadRequest, message = "Invalid Credentials" });
-      JwtService jwt_service = new JwtService();
-      var token = jwt_service.Generatejwt(user.Id);
+      var token = jwtService.Generatejwt(user.Id);
       return Ok(new { code = HttpStatusCode.OK, message = "Logged In Successfully", data = user.parseUserDto(), token = token });
     }
 
     [HttpGet("profile")]
-    public async Task<ActionResult<User>> Profile()
+    public async Task<ActionResult<UserDto>> Profile()
     {
       //var jwt = Request.Cookies["jwt"]
       // Retrieve the JWT token from the request header
@@ -115,8 +117,7 @@ namespace Notepad.Controllers
       {
         return Unauthorized("JWT token is missing in the request header");
       }
-      JwtService jwt_service = new JwtService();
-      var token = jwt_service.VerifyJwt(jwt);
+      var token = jwtService.VerifyJwt(jwt);
       Guid userId = new Guid(token.Issuer);
       var user = await userRepository.GetUserAsync(userId);
       if (user == null)

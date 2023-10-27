@@ -53,7 +53,7 @@ namespace Notepad.Repository
     public async Task ResetPasswordAsync(ResetPasswordDto reset)
     {
       var filter = filterBuilder.Eq(existingUser => existingUser.Id, reset.Id);
-      var update = Builders<User>.Update.Set("Password", reset.Password);
+      var update = Builders<User>.Update.Set("Password", BCrypt.Net.BCrypt.HashPassword(reset.Password));
       await UserCollections.UpdateOneAsync(filter, update);
     }
 

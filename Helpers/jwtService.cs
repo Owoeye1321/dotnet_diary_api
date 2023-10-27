@@ -1,13 +1,13 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using Notepad.Models;
+using Notepad.Interface;
 
 namespace Notepad.Helpers
 {
-  public class JwtService
+  public class JwtService : IJwtService
   {
-    private string securityKey = "hello world keep this parameter save";
+    private string securityKey = "hello world what exactly is happening";
     public string Generatejwt(Guid id)
     {
       var symmentricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
@@ -21,14 +21,15 @@ namespace Notepad.Helpers
     {
       var tokenHandler = new JwtSecurityTokenHandler();
       var key = Encoding.ASCII.GetBytes(securityKey);
-      tokenHandler.ValidateToken(jwt,new TokenValidationParameters {
+      tokenHandler.ValidateToken(jwt, new TokenValidationParameters
+      {
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateIssuerSigningKey = true,
         ValidateIssuer = false,
         ValidateAudience = false
-      }, out SecurityToken  validatedToken);
+      }, out SecurityToken validatedToken);
 
-      return (JwtSecurityToken) validatedToken;
+      return (JwtSecurityToken)validatedToken;
     }
   }
 

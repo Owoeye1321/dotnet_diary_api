@@ -2,6 +2,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using Notepad.Controllers;
+using Notepad.Helpers;
 using Notepad.Interface;
 using Notepad.Repository;
 using Notepad.Settings;
@@ -23,6 +24,7 @@ BsonSerializer.RegisterSerializer(new GuidSerializer(MongoDB.Bson.BsonType.Strin
 BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(MongoDB.Bson.BsonType.String));
 builder.Services.AddSingleton<IUserActions, UserRepository>();
 builder.Services.AddSingleton<INoteActions, NoteRepository>();
+builder.Services.AddSingleton<IJwtService, JwtService>();
 builder.Services.AddSingleton<IMongoClient>(ServiceProvider =>
 {
     var settings = builder.Configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();

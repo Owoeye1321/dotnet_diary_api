@@ -6,5 +6,6 @@ namespace Notepad.Interface
     Task CreateNoteAsync(Note note);
     Task UpdateNoteAsync(Note note);
     Task DeleteNoteAsync(Guid Id);
+    Task<IEnumerable<Note>> GetNotesAsync(Guid UserId);
   }
 }

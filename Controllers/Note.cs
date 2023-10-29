@@ -28,11 +28,8 @@ namespace Notepad
     {
       //var jwt = Request.Cookies["jwt"]
       // Retrieve the JWT token from the request header
-      string jwt = Request.Headers["Authorization"].FirstOrDefault()?.Replace("Bearer ", "");
-      //var jwt = Request.Cookies["jwt"]
-      // Retrieve the JWT token from the request header
-
-      if (string.IsNullOrEmpty(jwt))
+    string jwt = Request.Headers["Authorization"].FirstOrDefault()?.Replace("Bearer ", "");
+        if (string.IsNullOrEmpty(jwt))
       {
         return Unauthorized("Jwt is not provided");
       };
@@ -51,6 +48,15 @@ namespace Notepad
       return Ok(new { statusCode = HttpStatusCode.OK, message = "Saved Successfully" });
     }
 
+      [HttpGet("all")]
 
+      public async Task<ActionResult<IEnumerable<NotepadDto>>> GetNotesAsync(){
+        var jwt = Request.Headers["Authorizations"].FirstOrDefault()?.Replace("Bearer ","");
+        if(string.IsNullOrEmpty(jwt)) return BadRequest(new {status = HttpStatusCode.BadRequest, message = "Invalid jwt"});
+        var token = jwtService.VerifyJwt(jwt);
+        Guid userId = new Guid(token.Issuer);
+        var notes = (await noteRepository.GetNotesAsync(userId)).Select(notes => note.parseNoteDto());
+
+      }
   }
 }

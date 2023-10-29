@@ -22,19 +22,19 @@ namespace Notepad.Repository
     }
     public async Task UpdateNoteAsync(Note note)
     {
-      var filter = filterBuilder.Eq(existingNotes=> existingNotes.Id , note.Id);
+      var filter = filterBuilder.Eq(existingNotes => existingNotes.Id, note.Id);
       var update = Builders<Note>.Update.Set("Content", note.Content);
       await NoteCollections.UpdateOneAsync(filter, update);
     }
     public async Task DeleteNoteAsync(Guid Id)
     {
-      var filter = filterBuilder.Eq(existingNotes=>existingNotes.Id, Id);
+      var filter = filterBuilder.Eq(existingNotes => existingNotes.Id, Id);
       await NoteCollections.DeleteOneAsync(filter);
     }
-     public async Task<IEnumerable<Note>> GetNotesAsync(Guid UserId)
+    public async Task<IEnumerable<Note>> GetNotesAsync(Guid UserId)
     {
-      var filter = filterBuilder.Eq(existingNotes=>existingNotes.UserId, UserId);
-      return  await NoteCollections.FindAsync(filter).ToListAsync();
+      var filter = filterBuilder.Eq(existingNotes => existingNotes.UserId, UserId);
+      return await NoteCollections.Find(filter).ToListAsync();
     }
   }
 }

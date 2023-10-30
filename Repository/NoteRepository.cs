@@ -37,5 +37,11 @@ namespace Notepad.Repository
       var filter = filterBuilder.Eq(existingNotes => existingNotes.UserId, UserId);
       return await NoteCollections.Find(filter).ToListAsync();
     }
+
+    public async Task<Note> GetNoteAsync(Guid Id)
+    {
+      var filter = filterBuilder.Eq(existingNotes => existingNotes.Id, Id);
+      return await NoteCollections.Find(filter).SingleOrDefaultAsync();
+    }
   }
 }

@@ -7,6 +7,8 @@ namespace Notepad.Helpers
 {
   public class JwtService : IJwtService
   {
+
+    //Authentication via jwt is written here
     private string securityKey = "hello world what exactly is happening";
     public string Generatejwt(Guid id)
     {

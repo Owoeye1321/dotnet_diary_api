@@ -4,6 +4,7 @@ using Notepad.Dtos;
 namespace Notepad
 {
 
+  //this extention file help to parse the model into an ordinar object response
   public static class Extention
   {
     public static NotepadDto parseNoteDto(this Note note)

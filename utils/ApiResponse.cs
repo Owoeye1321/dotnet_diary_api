@@ -3,6 +3,7 @@ using Notepad.Dtos;
 
 namespace Notepad.utils
 {
+  //this is an object construction for response type
   public class ApiResponse
   {
     public HttpStatusCode responseCode { get; init; }

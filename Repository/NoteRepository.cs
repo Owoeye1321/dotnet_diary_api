@@ -1,4 +1,5 @@
 using MongoDB.Driver;
+using Notepad.Dtos;
 using Notepad.Interface;
 using Notepad.Models;
 
@@ -20,9 +21,9 @@ namespace Notepad.Repository
       await NoteCollections.InsertOneAsync(note);
 
     }
-    public async Task UpdateNoteAsync(Note note)
+    public async Task UpdateNoteAsync(UpdateNotepadDto note, Guid Id)
     {
-      var filter = filterBuilder.Eq(existingNotes => existingNotes.Id, note.Id);
+      var filter = filterBuilder.Eq(existingNotes => existingNotes.Id, Id);
       var update = Builders<Note>.Update.Set("Content", note.Content);
       await NoteCollections.UpdateOneAsync(filter, update);
     }

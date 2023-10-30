@@ -43,7 +43,7 @@ namespace Notepad
         {
           var token = jwtService.VerifyJwt(jwt);
           Guid userId = new Guid(token.Issuer);
-          var user = userRepository.GetUserAsync(userId);
+          var user = await userRepository.GetUserAsync(userId);
           if (user is null) return BadRequest(new { status = HttpStatusCode.BadRequest, message = "Invalid User" });
           Note data = new()
           {
@@ -72,19 +72,66 @@ namespace Notepad
       }
     }
 
-    [HttpGet("all")]
+    [HttpGet]
     public async Task<ActionResult<IEnumerable<NotepadDto>>> GetNotesAsync()
     {
-      var jwt = Request.Headers["Authorizations"].FirstOrDefault()?.Replace("Bearer ", "");
-      if (string.IsNullOrEmpty(jwt)) return BadRequest(new { status = HttpStatusCode.BadRequest, message = "Invalid jwt" });
-      var token = jwtService.VerifyJwt(jwt);
-      Guid userId = new Guid(token.Issuer);
-      var user = userRepository.GetUserAsync(userId);
-      if (user is null) return BadRequest(new { status = HttpStatusCode.BadRequest, message = "Invalid User" });
-      var notes = (await noteRepository.GetNotesAsync(userId)).Select(note => note.parseNoteDto());
-      return Ok(new { statusCode = HttpStatusCode.OK, data = notes });
+      try
+      {
+        var jwt = Request.Headers["Authorization"].FirstOrDefault()?.Replace("Bearer ", "");
+        if (string.IsNullOrEmpty(jwt)) return BadRequest(new { status = HttpStatusCode.BadRequest, message = "Invalid jwt" });
+        try
+        {
+          var token = jwtService.VerifyJwt(jwt);
+          Guid userId = new Guid(token.Issuer);
+          var user = await userRepository.GetUserAsync(userId);
+          if (user is null) return BadRequest(new { status = HttpStatusCode.BadRequest, message = "Invalid User" });
+          var notes = (await noteRepository.GetNotesAsync(userId)).Select(note => note.parseNoteDto());
+          return Ok(new { statusCode = HttpStatusCode.OK, message = "success", data = notes });
+        }
+        catch (System.Exception)
+        {
 
+          return BadRequest(new { status = HttpStatusCode.BadRequest, message = "Unauthorized identity" });
+        }
+
+      }
+      catch (System.Exception)
+      {
+
+        return BadRequest(new { status = HttpStatusCode.BadGateway, message = "An error occured" });
+      }
 
     }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult> UpdateNoteAsync(Guid id, UpdateNotepadDto note)
+    {
+      try
+      {
+        try
+        {
+          var jwt = Request.Headers["Authorization"].SingleOrDefault()?.Replace("Bearer ", "");
+          var token = jwtService.VerifyJwt(jwt);
+          Guid userId = new Guid(token.Issuer);
+          var user = await userRepository.GetUserAsync(userId);
+          if (user is null) return BadRequest(new { status = HttpStatusCode.BadRequest, message = "Invalid User" });
+          await noteRepository.UpdateNoteAsync(note, id);
+          return Ok(new { statusCode = HttpStatusCode.OK, message = "Updated successfully" });
+
+        }
+        catch (System.Exception)
+        {
+
+          return BadRequest(new { status = HttpStatusCode.BadRequest, message = "Unauthorized identity" });
+        }
+
+      }
+      catch (System.Exception)
+      {
+        return BadRequest(new { status = HttpStatusCode.BadGateway, message = "An error occured" });
+
+      }
+    }
   }
+
 }

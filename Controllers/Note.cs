@@ -104,7 +104,7 @@ namespace Notepad
 
     }
 
-    [HttpPut("{id}")]
+    [HttpPatch("{id}")]
     public async Task<ActionResult> UpdateNoteAsync(Guid id, UpdateNotepadDto note)
     {
       try
@@ -146,7 +146,36 @@ namespace Notepad
           var user = await userRepository.GetUserAsync(userId);
           if (user is null) return BadRequest(new { status = HttpStatusCode.BadRequest, message = "Invalid User" });
           var singleNote = await noteRepository.GetNoteAsync(Id);
-          return Ok(new { statusCode = HttpStatusCode.OK, message = "Updated successfully", note = singleNote.parseNoteDto() });
+          return Ok(new { statusCode = HttpStatusCode.OK, message = "Note Returned successfully", note = singleNote.parseNoteDto() });
+
+        }
+        catch (System.Exception)
+        {
+
+          return BadRequest(new { status = HttpStatusCode.BadRequest, message = "Unauthorized identity" });
+        }
+      }
+      catch (System.Exception)
+      {
+
+        return BadRequest(new { status = HttpStatusCode.BadGateway, message = "An error occured" });
+      }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Note>> DeleteNoteAsync(Guid Id)
+    {
+      try
+      {
+        try
+        {
+          var jwt = Request.Headers["Authorization"].SingleOrDefault()?.Replace("Bearer ", "");
+          var token = jwtService.VerifyJwt(jwt);
+          Guid userId = new Guid(token.Issuer);
+          var user = await userRepository.GetUserAsync(userId);
+          if (user is null) return BadRequest(new { status = HttpStatusCode.BadRequest, message = "Invalid User" });
+          await noteRepository.DeleteNoteAsync(Id);
+          return Ok(new { statusCode = HttpStatusCode.OK, message = "Note deleted successfully" });
 
         }
         catch (System.Exception)

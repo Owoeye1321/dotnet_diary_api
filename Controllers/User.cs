@@ -73,7 +73,7 @@ namespace Notepad.Controllers
       return Ok(response);
     }
 
-    [HttpPut("reset-password")]
+    [HttpPatch("reset-password")]
     public async Task<ActionResult> ResetPasswordAsync(ResetPasswordDto reset)
     {
       var user = await userRepository.GetUserAsync(reset.Id);

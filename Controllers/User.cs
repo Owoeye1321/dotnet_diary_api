@@ -109,22 +109,39 @@ namespace Notepad.Controllers
     [HttpGet("profile")]
     public async Task<ActionResult<UserDto>> Profile()
     {
-      //var jwt = Request.Cookies["jwt"]
-      // Retrieve the JWT token from the request header
-      string jwt = Request.Headers["Authorization"].FirstOrDefault()?.Replace("Bearer ", "");
+      try
+      {
+        //var jwt = Request.Cookies["jwt"]
+        // Retrieve the JWT token from the request header
+        string jwt = Request.Headers["Authorization"].FirstOrDefault()?.Replace("Bearer ", "");
 
-      if (string.IsNullOrEmpty(jwt))
-      {
-        return Unauthorized("JWT token is missing in the request header");
+        if (string.IsNullOrEmpty(jwt))
+        {
+          return Unauthorized("JWT token is missing in the request header");
+        }
+        try
+        {
+          var token = jwtService.VerifyJwt(jwt);
+          Guid userId = new Guid(token.Issuer);
+          var user = await userRepository.GetUserAsync(userId);
+          if (user is null)
+          {
+            return NotFound("User not found");
+          }
+          return Ok(new { code = HttpStatusCode.OK, message = "Profile retrieved", data = user.parseUserDto() });
+        }
+        catch (System.Exception)
+        {
+
+          return BadRequest(new { status = HttpStatusCode.BadRequest, message = "Unauthorized token" });
+        }
       }
-      var token = jwtService.VerifyJwt(jwt);
-      Guid userId = new Guid(token.Issuer);
-      var user = await userRepository.GetUserAsync(userId);
-      if (user == null)
+      catch (System.Exception)
       {
-        return NotFound("User not found");
+
+        return BadRequest(new { status = HttpStatusCode.BadGateway, message = "An error occured" });
       }
-      return Ok(new { code = HttpStatusCode.OK, message = "Profile retrieved", data = user.parseUserDto() });
+
     }
 
   }

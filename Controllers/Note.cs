@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Notepad.Controllers;
 using Notepad.Dtos;
+using Notepad.Helpers;
 using Notepad.Interface;
 using Notepad.Models;
 using Notepad.Repository;
@@ -130,6 +131,34 @@ namespace Notepad
       {
         return BadRequest(new { status = HttpStatusCode.BadGateway, message = "An error occured" });
 
+      }
+    }
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Note>> GetNoteAsync(Guid Id)
+    {
+      try
+      {
+        try
+        {
+          var jwt = Request.Headers["Authorization"].SingleOrDefault()?.Replace("Bearer ", "");
+          var token = jwtService.VerifyJwt(jwt);
+          Guid userId = new Guid(token.Issuer);
+          var user = await userRepository.GetUserAsync(userId);
+          if (user is null) return BadRequest(new { status = HttpStatusCode.BadRequest, message = "Invalid User" });
+          var singleNote = await noteRepository.GetNoteAsync(Id);
+          return Ok(new { statusCode = HttpStatusCode.OK, message = "Updated successfully", note = singleNote.parseNoteDto() });
+
+        }
+        catch (System.Exception)
+        {
+
+          return BadRequest(new { status = HttpStatusCode.BadRequest, message = "Unauthorized identity" });
+        }
+      }
+      catch (System.Exception)
+      {
+
+        return BadRequest(new { status = HttpStatusCode.BadGateway, message = "An error occured" });
       }
     }
   }

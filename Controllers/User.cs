@@ -41,8 +41,9 @@ namespace Notepad.Controllers
         Role = userDto.Role
       };
       await userRepository.CreateUserAsync(user);
-      ApiResponse response = new(HttpStatusCode.OK, "Account Created Successfully", user.parseUserDto());
-      return Ok(response);
+      var tokenData = jwtService.Generatejwt(user.Id);
+      //ApiResponse response = new(HttpStatusCode.OK, "Account Created Successfully", user.parseUserDto());
+      return Ok(new { code = HttpStatusCode.OK, message = "Account Created Successfully", data = user.parseUserDto(), token = tokenData });
 
     }
 

@@ -7,8 +7,8 @@ using Notepad.Interface;
 using Notepad.Models;
 using Notepad.Repository;
 
-namespace Notepad
-{
+namespace Notepad.Controllers
+{ 
 
   //this brings a bunch of additional default behaviour for your controller 
   [ApiController]
@@ -18,7 +18,7 @@ namespace Notepad
   public class NoteController : ControllerBase
   {
 
-    private INoteActions noteRepository;
+    private INoteActions noteRepository;  
     private IJwtService jwtService;
     private IUserActions userRepository;
     public NoteController(INoteActions noteRepository, IJwtService jwtService, IUserActions userRepository)

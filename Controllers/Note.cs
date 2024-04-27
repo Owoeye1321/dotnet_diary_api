@@ -17,7 +17,6 @@ namespace Notepad.Controllers
   [Route("note")]
   public class NoteController : ControllerBase
   {
-
     private INoteActions noteRepository;  
     private IJwtService jwtService;
     private IUserActions userRepository;

@@ -35,8 +35,6 @@ namespace Notepad.Repository
 
       var filter = filterBuilder.Eq(user => user.Id, Id);
       return await UserCollections.Find(filter).SingleOrDefaultAsync();
-
-
     }
 
     public async Task<IEnumerable<User>> GetUsersAsync()

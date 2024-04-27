@@ -19,7 +19,6 @@ namespace Notepad.Repository
     public async Task CreateNoteAsync(Note note)
     {
       await NoteCollections.InsertOneAsync(note);
-
     }
     public async Task UpdateNoteAsync(UpdateNotepadDto note, Guid Id)
     {
